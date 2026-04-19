@@ -1,40 +1,87 @@
-# Projet SAW Logement (Aggregation ponderee)
+﻿# Projet Logement ADOMC - Dashboard SAW
 
-Ce dossier contient un nouveau projet autonome, distinct du projet serveur, avec le meme principe d aide a la decision multicritere par aggregation ponderee (methode SAW).
+Ce projet est autonome et distinct du projet serveur.
+Il applique la meme methode d aggregation ponderee (SAW) a une problematique plus concrete: choisir un logement locatif.
 
-## Nouveau cas concret
+## Fonctionnalites implementees
 
-Selection de logements locatifs etudiants selon:
-- loyer (minimiser)
-- distance campus (minimiser)
-- surface (maximiser)
-- transport (maximiser)
-- securite de zone (maximiser)
+- Dashboard multi-sections avec navigation laterale:
+  - Apercu
+  - Pre-guide
+  - Ponderation
+  - Visualisation
+  - Classement
+  - Comparaison
+  - Sensibilite
+  - Calcul SAW
+- Authentification locale demo (session localStorage) avec compte par defaut:
+  - Email: groupe.logement@adomc.demo
+  - Mot de passe: adomc2026
+- Pre-guide de besoin qui genere poids + filtres selon un profil locataire.
+- Ponderation dynamique avec redistribution automatique pour garder 100%.
+- Presets de demonstration (equilibre, budget, confort, mobilite).
+- Filtres metier:
+  - budget max
+  - distance max
+  - surface min
+  - ville
+  - meuble uniquement
+  - recommandes uniquement
+- Sauvegarde et chargement de scenarios (localStorage).
+- Visualisation Pareto (SVG) avec:
+  - option afficher/masquer logements domines
+  - plafond de loyer affiche
+- Radar profil logement (SVG) pour lecture rapide des compromis.
+- Classement tableau avec:
+  - tri multi-colonnes
+  - pagination configurable de 5 a 50
+  - mode catalogue complet ou filtre
+  - bouton comparer par ligne
+- Comparaison directe de 3 logements max.
+- Analyse de sensibilite (what-if) sur un critere, avec courbes SVG et indicateurs de robustesse.
+- Details de calcul SAW pour le top 3.
+- Fallback intelligent sur catalogue complet pour eviter les onglets vides quand les filtres sont trop stricts.
+- Export CSV, export PDF imprimable, et partage de configuration par URL.
 
-## Ce qui est different de l ancien projet
+## Donnees diversifiees
 
-- Sujet metier different: logement au lieu de VPS
-- Interface tres differente: direction editoriale, carte de compromis SVG, cartes produit style catalogue
-- Aucun framework requis pour lancer la demo
-- Comparaison directe de 3 logements maximum
-- Export CSV et export PDF du classement courant
+Le catalogue est genere de facon synthetique mais realiste a partir de:
+- 35 villes internationales
+- 12 modeles de logement
+- 3 profils de quartier
+
+Total: 1260 logements avec variations de:
+- loyer
+- distance
+- surface
+- securite
+- qualite internet
+- statut meuble/non meuble
+- type de logement
+- quartier
+
+## Methode SAW
+
+Criteres utilises:
+- Loyer (minimiser)
+- Distance (minimiser)
+- Surface (maximiser)
+- Securite (maximiser)
+- Internet (maximiser)
+
+Calcul:
+1. Normalisation min-max par critere.
+2. Application des poids utilisateur.
+3. Score global par somme ponderee.
+4. Classement decroissant.
+5. Detection Pareto (domination multicritere).
 
 ## Lancement
 
-Ouvrir simplement le fichier index.html dans un navigateur.
-
-## Methodes implementees
-
-- Normalisation min-max
-  - critere a minimiser: (max - x) / (max - min)
-  - critere a maximiser: (x - min) / (max - min)
-- Score global SAW
-  - somme(score_normalise_critere * poids_critere)
-- Redistribution automatique des poids pour conserver une somme a 100%
-- Filtrage concret (budget, distance, surface, meuble)
+Ouvrir [index.html](index.html) dans un navigateur.
 
 ## Fichiers
 
-- index.html: structure de la page
-- styles.css: design visuel et responsive
-- app.js: donnees, algorithme SAW, filtres, rendu dynamique
+- [index.html](index.html): structure du dashboard
+- [styles.css](styles.css): theme et responsive
+- [app.js](app.js): donnees, algorithmes SAW, interactions UI, exports et partage
