@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ADOMC Logement - Agregation ponderee</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-shape bg-shape-a"></div>
+    <div class="bg-shape bg-shape-b"></div>
+
+    <header class="hero">
+      <p class="eyebrow">M2 2026 - Aide a la decision multicritere</p>
+      <h1>Choix de logement locatif par agregation ponderee</h1>
+      <p class="hero-text">
+        Meme logique mathematique SAW, mais appliquee a un cas concret de selection d appartement.
+        Ajustez les poids, filtrez le marche, puis interpretez le classement et les compromis.
+      </p>
+      <div class="hero-badges">
+        <span id="badge-count">0 logements analyses</span>
+        <span id="badge-pareto">0 front de compromis</span>
+        <span id="badge-strong">0 recommandations fortes</span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="control-panel">
+        <section class="panel-card">
+          <h2>Ponderation des criteres</h2>
+          <p class="muted">La somme reste automatiquement egale a 100%.</p>
+          <div id="weight-sliders" class="slider-list"></div>
+          <div class="weight-total">
+            <span>Total</span>
+            <strong id="weight-total">100%</strong>
+          </div>
+        </section>
+
+        <section class="panel-card">
+          <h2>Presets rapides</h2>
+          <div class="preset-row">
+            <button class="preset-btn" data-preset="balanced">Equilibre</button>
+            <button class="preset-btn" data-preset="budget">Budget</button>
+            <button class="preset-btn" data-preset="comfort">Confort</button>
+          </div>
+        </section>
+
+        <section class="panel-card">
+          <h2>Filtres concrets</h2>
+          <label class="field">
+            <span>Loyer max: <b id="rent-max-label"></b> EUR</span>
+            <input id="rent-max" type="range" min="350" max="1700" value="1200" step="10" />
+          </label>
+          <label class="field">
+            <span>Distance campus max: <b id="distance-max-label"></b> min</span>
+            <input id="distance-max" type="range" min="5" max="65" value="35" step="1" />
+          </label>
+          <label class="field">
+            <span>Surface min: <b id="surface-min-label"></b> m2</span>
+            <input id="surface-min" type="range" min="12" max="85" value="20" step="1" />
+          </label>
+          <label class="field checkbox-line">
+            <input id="furnished-only" type="checkbox" />
+            <span>Uniquement les logements meubles</span>
+          </label>
+        </section>
+      </aside>
+
+      <section class="result-panel">
+        <div class="result-head">
+          <div>
+            <h2>Classement des logements</h2>
+            <p id="result-summary" class="muted"></p>
+          </div>
+          <div class="actions-row">
+            <button id="export-csv" class="action-btn">Exporter CSV</button>
+            <button id="export-pdf" class="action-btn action-btn-primary">Exporter PDF</button>
+          </div>
+        </div>
+
+        <div class="map-card">
+          <div class="map-head">
+            <h3>Carte de compromis (loyer vs attractivite)</h3>
+            <p class="muted">Plus un point est haut, plus le score global est eleve.</p>
+          </div>
+          <svg id="tradeoff-map" viewBox="0 0 1000 320" preserveAspectRatio="none"></svg>
+        </div>
+
+        <div class="map-card comparison-card">
+          <div class="map-head">
+            <h3>Comparaison directe (max 3 logements)</h3>
+            <p class="muted" id="comparison-status">Selectionnez des logements depuis le classement.</p>
+          </div>
+          <div id="comparison-panel" class="comparison-panel"></div>
+        </div>
+
+        <div id="housing-list" class="housing-list"></div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
