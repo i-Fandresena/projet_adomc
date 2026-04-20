@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ADOMC Logement Dashboard - Agregation ponderee</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -12,6 +16,7 @@
 
     <div id="login-screen" class="login-screen">
       <section class="login-card">
+        <div class="login-emblem"><i class="fa-solid fa-house-signal"></i></div>
         <p class="eyebrow">Acces demo local</p>
         <h1>Dashboard logement multicritere</h1>
         <p class="muted">Connexion locale pour la demonstration de soutenance.</p>
@@ -38,21 +43,23 @@
         </div>
         <div class="topbar-actions">
           <span id="session-badge" class="session-badge"></span>
-          <button id="logout-btn" class="ghost-btn" type="button">Deconnexion</button>
+          <button id="theme-toggle" class="ghost-btn theme-btn" type="button"><i class="fa-solid fa-palette"></i> Theme Minimal</button>
+          <button id="logout-btn" class="ghost-btn" type="button"><i class="fa-solid fa-right-from-bracket"></i> Deconnexion</button>
         </div>
       </header>
 
       <div class="layout">
         <aside class="sidebar">
+          <p class="sidebar-title">Navigation</p>
           <nav id="sidebar-nav" class="nav-list">
-            <button data-section="overview" class="nav-btn active">Apercu</button>
-            <button data-section="guide" class="nav-btn">Pre-guide</button>
-            <button data-section="weights" class="nav-btn">Ponderation</button>
-            <button data-section="visual" class="nav-btn">Visualisation</button>
-            <button data-section="ranking" class="nav-btn">Classement</button>
-            <button data-section="comparison" class="nav-btn">Comparaison</button>
-            <button data-section="sensitivity" class="nav-btn">Sensibilite</button>
-            <button data-section="calcs" class="nav-btn">Calcul SAW</button>
+            <button data-section="overview" class="nav-btn active"><i class="fa-solid fa-chart-pie"></i><span>Apercu</span></button>
+            <button data-section="guide" class="nav-btn"><i class="fa-solid fa-wand-magic-sparkles"></i><span>Pre-guide</span></button>
+            <button data-section="weights" class="nav-btn"><i class="fa-solid fa-sliders"></i><span>Ponderation</span></button>
+            <button data-section="visual" class="nav-btn"><i class="fa-solid fa-chart-line"></i><span>Visualisation</span></button>
+            <button data-section="ranking" class="nav-btn"><i class="fa-solid fa-list-ol"></i><span>Classement</span></button>
+            <button data-section="comparison" class="nav-btn"><i class="fa-solid fa-scale-balanced"></i><span>Comparaison</span></button>
+            <button data-section="sensitivity" class="nav-btn"><i class="fa-solid fa-wave-square"></i><span>Sensibilite</span></button>
+            <button data-section="calcs" class="nav-btn"><i class="fa-solid fa-calculator"></i><span>Calcul SAW</span></button>
           </nav>
         </aside>
 
@@ -60,7 +67,7 @@
           <section id="section-overview" class="section active">
             <div class="cards-row" id="overview-cards"></div>
             <article class="card">
-              <h2>Vue globale</h2>
+              <h2><i class="fa-solid fa-globe"></i> Vue globale</h2>
               <p class="muted">
                 Ce projet applique la methode SAW a un cas concret de choix de logement.
                 Les criteres, filtres et graphiques sont synchronises en temps reel pour faciliter
@@ -71,7 +78,7 @@
 
           <section id="section-guide" class="section">
             <article class="card">
-              <h2>Pre-guide de besoin</h2>
+              <h2><i class="fa-solid fa-route"></i> Pre-guide de besoin</h2>
               <p class="muted">Le formulaire convertit des contraintes reelles en poids SAW et filtres applicables.</p>
               <form id="guide-form" class="grid-form">
                 <label>
@@ -121,7 +128,7 @@
           <section id="section-weights" class="section">
             <div class="two-cols">
               <article class="card">
-                <h2>Ponderation des criteres</h2>
+                <h2><i class="fa-solid fa-balance-scale"></i> Ponderation des criteres</h2>
                 <p class="muted">La redistribution garantit une somme totale egale a 100%.</p>
                 <div id="weight-sliders" class="slider-list"></div>
                 <div class="weight-total"><span>Total</span><strong id="weight-total">100%</strong></div>
@@ -131,7 +138,7 @@
               </article>
 
               <article class="card">
-                <h2>Filtres utilisateur</h2>
+                <h2><i class="fa-solid fa-filter"></i> Filtres utilisateur</h2>
                 <label class="field">
                   <span>Loyer max: <b id="budget-label"></b> EUR</span>
                   <input id="budget-max" type="range" min="300" max="2600" step="10" />
@@ -172,7 +179,7 @@
 
           <section id="section-visual" class="section">
             <article class="card">
-              <h2>Analyse Pareto logement</h2>
+              <h2><i class="fa-solid fa-chart-scatter"></i> Analyse Pareto logement</h2>
               <div class="inline-controls">
                 <label class="check">
                   <input id="show-dominated" type="checkbox" checked />
@@ -187,7 +194,7 @@
             </article>
 
             <article class="card">
-              <h2>Radar profil logement</h2>
+              <h2><i class="fa-solid fa-bullseye"></i> Radar profil logement</h2>
               <p class="muted">Affiche le profil du meilleur logement filtre ou du premier logement compare.</p>
               <svg id="radar-svg" viewBox="0 0 420 320"></svg>
             </article>
@@ -197,13 +204,13 @@
             <article class="card">
               <div class="ranking-head">
                 <div>
-                  <h2>Classement tableau et export</h2>
+                  <h2><i class="fa-solid fa-table-list"></i> Classement tableau et export</h2>
                   <p id="ranking-summary" class="muted"></p>
                 </div>
                 <div class="inline-actions wrap">
-                  <button id="share-config" type="button">Partager config</button>
-                  <button id="export-pdf" type="button">Exporter PDF</button>
-                  <button id="export-csv" type="button">Exporter CSV</button>
+                  <button id="share-config" type="button"><i class="fa-solid fa-link"></i> Partager config</button>
+                  <button id="export-pdf" type="button"><i class="fa-solid fa-file-pdf"></i> Exporter PDF</button>
+                  <button id="export-csv" type="button"><i class="fa-solid fa-file-csv"></i> Exporter CSV</button>
                 </div>
               </div>
               <p id="share-status" class="muted"></p>
@@ -235,7 +242,7 @@
 
           <section id="section-comparison" class="section">
             <article class="card">
-              <h2>Comparaison directe (max 3)</h2>
+              <h2><i class="fa-solid fa-scale-balanced"></i> Comparaison directe (max 3)</h2>
               <div class="inline-controls">
                 <label>
                   <span>Ajouter un logement</span>
@@ -250,7 +257,7 @@
 
           <section id="section-sensitivity" class="section">
             <article class="card">
-              <h2>Analyse de sensibilite</h2>
+              <h2><i class="fa-solid fa-chart-area"></i> Analyse de sensibilite</h2>
               <div class="inline-controls wrap">
                 <label>
                   <span>Critere varie</span>
@@ -272,7 +279,7 @@
 
           <section id="section-calcs" class="section">
             <article class="card">
-              <h2>Details calcul SAW (Top 3)</h2>
+              <h2><i class="fa-solid fa-calculator"></i> Details calcul SAW (Top 3)</h2>
               <p class="muted">Chaque ligne expose la normalisation et la contribution ponderee.</p>
               <div id="calcs-list" class="calc-list"></div>
             </article>

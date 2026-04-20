@@ -2,6 +2,7 @@
 const SESSION_KEY = 'adomc-logement-session';
 const USERS_KEY = 'adomc-logement-users';
 const SCENARIOS_KEY = 'adomc-logement-scenarios';
+const THEME_KEY = 'adomc-logement-theme';
 
 const CRITERIA = {
   rent: { label: 'Loyer', direction: 'min' },
@@ -177,6 +178,7 @@ const els = {
   loginPassword: getEl('login-password'),
   loginMessage: getEl('login-message'),
   sessionBadge: getEl('session-badge'),
+  themeToggle: getEl('theme-toggle'),
   logoutBtn: getEl('logout-btn'),
   sidebarNav: getEl('sidebar-nav'),
   sections: Array.from(document.querySelectorAll('.section')),
@@ -257,6 +259,35 @@ function setSession(email) {
 
 function clearSession() {
   window.localStorage.removeItem(SESSION_KEY);
+}
+
+function applyTheme(themeName) {
+  const theme = themeName === 'minimal' ? 'minimal' : 'corporate';
+  if (theme === 'minimal') {
+    document.body.setAttribute('data-theme', 'minimal');
+  } else {
+    document.body.removeAttribute('data-theme');
+  }
+
+  if (els.themeToggle) {
+    if (theme === 'minimal') {
+      els.themeToggle.innerHTML = '<i class="fa-solid fa-building"></i> Theme Corporate';
+    } else {
+      els.themeToggle.innerHTML = '<i class="fa-solid fa-palette"></i> Theme Minimal';
+    }
+  }
+}
+
+function initTheme() {
+  const savedTheme = window.localStorage.getItem(THEME_KEY) || 'corporate';
+  applyTheme(savedTheme);
+}
+
+function toggleTheme() {
+  const isMinimal = document.body.getAttribute('data-theme') === 'minimal';
+  const next = isMinimal ? 'corporate' : 'minimal';
+  applyTheme(next);
+  window.localStorage.setItem(THEME_KEY, next);
 }
 
 function showApp(sessionEmail) {
@@ -642,12 +673,12 @@ function renderOverview() {
     : 0;
 
   els.overviewCards.innerHTML = `
-    <div class="stat-card"><p>Catalogue total</p><strong>${dataset.length}</strong></div>
-    <div class="stat-card"><p>Logements filtres</p><strong>${currentFiltered.length}</strong></div>
-    <div class="stat-card"><p>Pareto optimaux</p><strong>${pareto}</strong></div>
-    <div class="stat-card"><p>Recommandes</p><strong>${recommended}</strong></div>
-    <div class="stat-card"><p>Comparaison active</p><strong>${compared}/3</strong></div>
-    <div class="stat-card"><p>Score moyen filtre</p><strong>${avgScore.toFixed(1)}%</strong></div>
+    <div class="stat-card"><i class="fa-solid fa-earth-africa stat-icon"></i><p class="stat-label">Catalogue total</p><strong>${dataset.length}</strong></div>
+    <div class="stat-card"><i class="fa-solid fa-sliders stat-icon"></i><p class="stat-label">Logements filtres</p><strong>${currentFiltered.length}</strong></div>
+    <div class="stat-card"><i class="fa-solid fa-chart-line stat-icon"></i><p class="stat-label">Pareto optimaux</p><strong>${pareto}</strong></div>
+    <div class="stat-card"><i class="fa-solid fa-circle-check stat-icon"></i><p class="stat-label">Recommandes</p><strong>${recommended}</strong></div>
+    <div class="stat-card"><i class="fa-solid fa-scale-balanced stat-icon"></i><p class="stat-label">Comparaison active</p><strong>${compared}/3</strong></div>
+    <div class="stat-card"><i class="fa-solid fa-gauge-high stat-icon"></i><p class="stat-label">Score moyen filtre</p><strong>${avgScore.toFixed(1)}%</strong></div>
   `;
 }
 
@@ -1410,6 +1441,10 @@ function wireEvents() {
     button.addEventListener('click', () => setActiveSection(button.dataset.section));
   });
 
+  if (els.themeToggle) {
+    els.themeToggle.addEventListener('click', toggleTheme);
+  }
+
   els.applyGuide.addEventListener('click', applyGuideProfile);
   els.saveScenario.addEventListener('click', saveScenario);
 
@@ -1528,6 +1563,7 @@ function wireEvents() {
 }
 
 function bootstrap() {
+  initTheme();
   dataset = generateDataset();
   computeRanges();
   initControls();
