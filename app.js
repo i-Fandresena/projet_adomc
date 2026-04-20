@@ -905,9 +905,21 @@ function renderRankingHeader() {
         state.sortKey = key;
         state.sortDirection = key === 'rank' ? 'asc' : 'desc';
       }
+      updateSortHeaderVisuals();
       state.currentPage = 1;
       renderAll();
     });
+  });
+
+  updateSortHeaderVisuals();
+}
+
+function updateSortHeaderVisuals() {
+  els.rankingHeadRow.querySelectorAll('button[data-sort-key]').forEach((button) => {
+    const active = button.dataset.sortKey === state.sortKey;
+    button.classList.toggle('sort-active', active);
+    button.classList.toggle('sort-asc', active && state.sortDirection === 'asc');
+    button.classList.toggle('sort-desc', active && state.sortDirection === 'desc');
   });
 }
 
@@ -928,6 +940,8 @@ function toggleComparison(id) {
 }
 
 function renderRanking() {
+  updateSortHeaderVisuals();
+
   const totalPages = Math.max(1, Math.ceil(currentSorted.length / state.pageSize));
   els.pageIndicator.textContent = `Page ${state.currentPage} / ${totalPages}`;
   els.prevPage.disabled = state.currentPage <= 1;
@@ -947,7 +961,7 @@ function renderRanking() {
         const selected = state.selectedIds.includes(item.id);
 
         return `
-          <tr>
+          <tr class="${selected ? 'row-selected' : ''}">
             <td>${item.rank}</td>
             <td>${item.name}</td>
             <td>${item.city}</td>
