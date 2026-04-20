@@ -234,7 +234,8 @@ const els = {
 function ensureDefaultUser() {
   if (typeof window === 'undefined') return;
   const raw = window.localStorage.getItem(USERS_KEY);
-  const users = raw ? safeParse(raw, []) : [];
+  const parsedUsers = raw ? safeParse(raw, []) : [];
+  const users = Array.isArray(parsedUsers) ? parsedUsers : [];
   if (!users.some((user) => String(user.email).toLowerCase() === DEFAULT_ACCOUNT.email.toLowerCase())) {
     users.push({ email: DEFAULT_ACCOUNT.email, password: DEFAULT_ACCOUNT.password });
     window.localStorage.setItem(USERS_KEY, JSON.stringify(users));
@@ -795,7 +796,8 @@ function applyPreset(index) {
 }
 
 function loadScenarios() {
-  state.scenarios = safeParse(window.localStorage.getItem(SCENARIOS_KEY), []);
+  const parsed = safeParse(window.localStorage.getItem(SCENARIOS_KEY), []);
+  state.scenarios = Array.isArray(parsed) ? parsed : [];
 }
 
 function saveScenarios() {
